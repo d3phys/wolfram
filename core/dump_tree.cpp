@@ -75,7 +75,7 @@ const gviz_options EDGE_INVIS = {
 };
 
 const gviz_options EDGE_DEFAULT = {
-        .style = ""
+        .style = "dashed"
 };
 
 struct gviz_node {
@@ -168,6 +168,9 @@ void dump_tree(node *root)
 
 static void print_node(node *cur)
 {
+        if (cur == nullptr)
+                return;
+
         assert(cur);
 
         static gviz_node n       = {0};
@@ -177,7 +180,7 @@ static void print_node(node *cur)
 
         n.cur = cur;
 
-        switch (cur->type) {
+        switch (cur->data.type) {
         case WF_VARIABLE:
                 opt = &NODE_VARIABLE;
                 break;
@@ -188,7 +191,8 @@ static void print_node(node *cur)
                 opt = &NODE_LITERAL;
                 break;
         default:
-                assert(0);
+                //assert(0);
+                return;
                 break;
         }
 
@@ -208,13 +212,23 @@ static void print_node(node *cur)
 #ifdef TREE_DEBUG
         e.opt = &EDGE_INVIS;
 
-        e.to   = cur;
-        e.from = cur->left;
-        gvprint_edge(&e);
+        if (cur->left) {
+                e.from = cur->left;
+                e.to   = cur->left->parent;
+                gvprint_edge(&e);
+        }
 
-        e.to   = cur;
+        if (cur->right) {
+                e.from = cur->right;
+                e.to   = cur->right->parent;
+                gvprint_edge(&e);
+        }
+
+        /*
+        e.to   = cur->right->parent;
         e.from = cur->right;
         gvprint_edge(&e);
+        */
 #endif
 }
 
@@ -258,15 +272,16 @@ static inline void gvprint_content(const gviz_node *node)
 
         gvprint("[label=\"");
 
-        switch (node->cur->type) {
+        wf_data data = node->cur->data;
+        switch (data.type) {
         case WF_VARIABLE:
-                gvprint("%c",  node->cur->data.var);
+                gvprint("%c", data.val.var);
                 break;
         case WF_OPERATOR:
-                gvprint_operator(node->cur->data.op);
+                gvprint_operator(data.val.op);
                 break;
         case WF_LITERAL:
-                gvprint("%lg", node->cur->data.lit);
+                gvprint("%lg", data.val.lit);
                 break;
         default:
                 assert(0);

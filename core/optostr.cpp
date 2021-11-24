@@ -18,6 +18,8 @@ const char *optostr(unsigned hash)
                 return "/";
         case OP_MUL: 
                 return "*";
+        case OP_POW: 
+                return "^";
         case OP_SIN: 
                 return "sin";
         case OP_COS: 
@@ -39,5 +41,6 @@ const char *optostr(unsigned hash)
         case OP_EXP: 
                 return "exp";
         default:
-                return 0;}
+                return nullptr;
+}
 }

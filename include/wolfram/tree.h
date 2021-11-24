@@ -1,11 +1,15 @@
 #ifndef TREE_H
 #define TREE_H
 
-
-union wf_data {
+union wf_value {
         char    var;
         unsigned op;
         double  lit;
+};
+
+struct wf_data {
+        int type = 0;
+        wf_value val;
 };
 
 struct node {
@@ -13,7 +17,6 @@ struct node {
         node *right  = nullptr;
         node *parent = nullptr;
 
-        int type = 0;
         wf_data data;
 };
 
@@ -25,8 +28,9 @@ struct node {
  */
 void visit_tree(node *root, void (*action)(node *nd));
 
-node *create_node(node *parent, int type);
-void delete_node(node *vet);
+void free_tree(node *root);
+node *create_node(node *parent = nullptr);
+node *copy_tree(node *n);
 
 #define TREE_DEBUG
 
@@ -35,6 +39,7 @@ void dump_tree(node *root);
 #else /* TREE_DEBUG */
 static inline void dump_tree(node *root) {}
 #endif /* TREE_DEBUG */
+
 
 #endif /* TREE_H */
 

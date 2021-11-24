@@ -11,6 +11,7 @@ const unsigned OP_ADD = 0xf5407fe5;
 const unsigned OP_SUB = 0xd5153ca0;
 const unsigned OP_DIV = 0x65f72102;
 const unsigned OP_MUL = 0x7881bffd;
+const unsigned OP_POW = 0xf7c35220;
 const unsigned OP_SIN = 0x759d7c9f;
 const unsigned OP_COS = 0xab8fbabb;
 const unsigned OP_TAN = 0xbb7a7f15;
