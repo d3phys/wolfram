@@ -15,8 +15,8 @@ static node *create_lit(double value)
         if (!newbie)
                 return nullptr;
 
-        newbie->data.type = WF_LITERAL;
-        newbie->data.val.lit = value;
+        newbie->type     = WF_LITERAL;
+        newbie->data.lit = value;
 
         return newbie;
 }
@@ -27,8 +27,8 @@ static node *create_var(char name)
         if (!newbie)
                 return nullptr;
 
-        newbie->data.type = WF_VARIABLE;
-        newbie->data.val.var= name;
+        newbie->type     = WF_VARIABLE;
+        newbie->data.var = name;
 
         return newbie;
 }
@@ -42,8 +42,8 @@ static node *create_op(unsigned opcode, node *left, node *right)
         if (!newbie)
                 return nullptr;
 
-        newbie->data.type = WF_OPERATOR;
-        newbie->data.val.op = opcode;
+        newbie->type    = WF_OPERATOR;
+        newbie->data.op = opcode;
 
         if (left) {
                 newbie->left  = left;
@@ -62,21 +62,21 @@ static node *diff_op(node *n)
 {
         assert(n);
 
-#define L n->left
-#define R n->right
+        #define L n->left
+        #define R n->right
 
-#define C(t) copy_tree(t)
-#define D(t) diff_tree(t)
+        #define C(t) copy_tree(t)
+        #define D(t) diff_tree(t)
 
-#define OP(op, lc, rc) create_op(op, lc, rc)
-#define LIT(val)       create_lit(val)
+        #define OP(op, lc, rc) create_op(op, lc, rc)
+        #define LIT(val)       create_lit(val)
 
-#define ADD(lc, rc) create_op(OP_ADD, lc, rc)
-#define SUB(lc, rc) create_op(OP_SUB, lc, rc)
-#define MUL(lc, rc) create_op(OP_MUL, lc, rc)
-#define DIV(lc, rc) create_op(OP_DIV, lc, rc)
+        #define ADD(lc, rc) create_op(OP_ADD, lc, rc)
+        #define SUB(lc, rc) create_op(OP_SUB, lc, rc)
+        #define MUL(lc, rc) create_op(OP_MUL, lc, rc)
+        #define DIV(lc, rc) create_op(OP_DIV, lc, rc)
 
-        switch (n->data.val.op) {
+        switch (n->data.op) {
         case OP_ADD:
                 return ADD(D(L), D(R));
         case OP_SUB:
@@ -117,20 +117,58 @@ node *diff_tree(node *n)
 {
         assert(n);
 
-        switch (n->data.type) {
+        switch (n->type) {
         case WF_LITERAL:
-                printf("lit: %lg\n", n->data.val.lit);
+                printf("lit: %lg\n", n->data.lit);
                 return create_lit(0);
         case WF_VARIABLE:
-                printf("var: %c\n", n->data.val.var);
+                printf("var: %c\n",  n->data.var);
                 return create_lit(1);
         case WF_OPERATOR:
-                printf("hash: %x\n", n->data.val.op);
+                printf("hash: %x\n", n->data.op);
                 return diff_op(n);
         default:
                 fprintf(stderr, "DIFF TREE FAILED whatufuck? :|\n");
                 return nullptr;
         }
 }
+
+node *optimize_tree(node *n)
+{
+        assert(n);
+}
+
+/*
+node *cut_nodes(node *n)
+{
+        assert(n);
+
+        if (n->type != WF_OPERATOR)
+                return nullptr;
+
+        if (n->left) 
+                cut_nodes(n->left);
+
+        if (n->right) 
+                cut_nodes(n->right);
+
+        switch (n->type) {
+        case OP_MUL:
+                if (n->left->data.type == WF_LITERAL && n->left->data.val.lit == 1) {
+                        free_tree(n->left);
+                        abandon_child(n, n->right);
+                } else if (n->right->data.type == WF_LITERAL && n->right->data.val.lit == 1) {
+                        free_tree(n->right);
+                        abandon_child(n, n->left);
+                }
+                break;
+
+        default:
+                break;
+        }
+
+        return nullptr;
+}
+*/
 
 

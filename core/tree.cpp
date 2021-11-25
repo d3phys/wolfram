@@ -2,10 +2,45 @@
 #include <string.h>
 #include <stdlib.h>
 #include <logs.h>
+#include <limits.h>
 
 #include <wolfram/tree.h>
+#include <wolfram/wolfram.h>
 
 static void unlink_tree(node *n);
+
+double *node_num(node *n)
+{
+        assert(n);
+        assert(n->type == NODE_NUM);
+
+        if (n->type == NODE_NUM)
+                return &n->data.num;
+
+        return 0;
+}
+
+char *node_var(node *n)
+{
+        assert(n);
+        assert(n->type == NODE_VAR);
+
+        if (n->type == NODE_VAR)
+                return &n->data.var;
+
+        return nullptr;
+}
+
+unsigned *node_op(node *n)
+{
+        assert(n);
+        assert(n->type == NODE_OP);
+
+        if (n->type == NODE_OP)
+                return &n->data.op;
+
+        return 0;
+}
 
 node *copy_tree(node *n)
 {
@@ -23,8 +58,6 @@ node *copy_tree(node *n)
                         free_tree(newbie);
                         return nullptr;
                 }
-
-                newbie->left->parent  = newbie;
         }
 
         if (n->right) {
@@ -33,31 +66,15 @@ node *copy_tree(node *n)
                         free_tree(newbie);
                         return nullptr;
                 }
-
-                newbie->right->parent = newbie;
         }
-
 
         return newbie;
 }
 
-static void unlink_tree(node *n)
-{
-        assert(n);
-
-        if (n->parent) {
-                if (n->parent->left  == n)
-                        n->parent->left  = nullptr;
-                if (n->parent->right == n)
-                        n->parent->right = nullptr;
-        }
-}
 
 void free_tree(node *root)
 {
         assert(root);
-
-        unlink_tree(root);
 
         if (root->left)
                 free_tree(root->left);
@@ -74,9 +91,6 @@ $       (node *newbie = (node *)calloc(1, sizeof(node));)
                 fprintf(logs, "Can't create node\n");
                 return newbie;
         }
-
-        if (parent)
-                newbie->parent = parent;
 
         return newbie;
 }

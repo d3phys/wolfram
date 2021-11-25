@@ -12,38 +12,44 @@
 #include <wolfram/operators.h>
 #include <wolfram/wolfram.h>
 
-static char *read_data(char *ptr, wf_data *const data);
+static node *read_data(char **ptr, node *n);
 static char *find_bracket(char *str);
 static ptrdiff_t remove_spaces(char *buf);
 
-static char *read_data(char *ptr, wf_data *const data)
+static node *read_data(char **ptr, node *n)
 {
-        assert(ptr);
-        assert(data);
+        assert(ptr && *ptr);
+        assert(n);
 
-        char *end = ptr;
-        double lit = strtod(ptr, &end);
-        if (end != ptr) {
-                data->type = WF_LITERAL;
-                data->val.lit = lit;
-                return end;
+        char *end = *ptr;
+        double num = strtod(*ptr, &end);
+        if (end != *ptr) {
+                n->type = NODE_NUM;
+                *node_num(n) = num;
+
+                *ptr = end;
+                return n;
         }
 
-        char *endptr = find_bracket(ptr);
-        unsigned hash = murmur_hash(ptr, (size_t)(endptr - ptr), SEED);
+        char *endptr = find_bracket(*ptr);
+        unsigned hash = murmur_hash(*ptr, (size_t)(endptr - *ptr), SEED);
         if (optostr(hash) != nullptr) {
-                data->type = WF_OPERATOR;
-                data->val.op = hash;
-                return endptr;
+                n->type = NODE_OP;
+                *node_op(n) = hash;
+
+                *ptr = endptr;
+                return n;
         }
         
-        if (*ptr != '\0') {
-                data->type = WF_VARIABLE;
-                data->val.var = *ptr;
-                return ptr + 1;
+        if (**ptr != '\0') {
+                n->type = NODE_VAR;
+                *node_var(n) = **ptr;
+
+                (*ptr)++;
+                return n;
         }
 
-        return ptr;
+        return nullptr;
 }
 
 static char *find_bracket(char *str)
@@ -72,45 +78,71 @@ static ptrdiff_t remove_spaces(char *buf)
         return w - buf + 1;
 }
 
-static char *read_formula(char *ptr, node *parent, node **parent_leaf)
+
+static node *read_formula(char **ptr)
 {
-        assert(ptr);
+        #define PARSE_DEBUG
+        #ifdef PARSE_DEBUG
+        #define shw printf("%d: %s\n", __LINE__, *ptr);
+        #else
+        #define shw ;
+        #endif 
 
-        if (*ptr != '(')
+        assert(ptr && *ptr);
+
+        if (**ptr != '(')
                 return nullptr;
-
-        ptr++;
-
-        node *curr = create_node();
-        if (parent_leaf)
-                *parent_leaf = curr;
-        if (parent)
-                curr->parent = parent;
-
-        if (*ptr == '(')
-                ptr = read_formula(ptr, curr, &curr->left);
-
-        if (!ptr)
+shw
+        (*ptr)++;
+shw
+        node *newbie = create_node();
+        if (!newbie)
                 return nullptr;
+shw
 
-        wf_data data = {0};
-        ptr = read_data(ptr, &data);
+        if (**ptr == '(') {
+                newbie->left = read_formula(ptr);
 
-        curr->data = data;
-
-        if (*ptr == '(') {
-                if (data.type != WF_OPERATOR)
+shw
+                if (!newbie->left) {
+                        free_tree(newbie);
                         return nullptr;
-
-                ptr = read_formula(ptr, curr, &curr->right);
-                if (!ptr)
-                        return nullptr;
+                }
+        }
+shw
+        node *read = read_data(ptr, newbie);
+shw
+        if (!read) {
+                free_tree(newbie);
+                return nullptr;
         }
 
-        if (*ptr != ')')
-                return nullptr;
+shw
+        if (**ptr == '(') {
+                if (newbie->type != NODE_OP) {
+                        free_tree(newbie);
+                        return nullptr;
+                }
+shw
+                newbie->right = read_formula(ptr);
+                if (!newbie->right) {
+                        free_tree(newbie);
+                        return nullptr;
+                }
+        }
 
-        return ++ptr;
+shw
+        if (**ptr != ')') {
+                free_tree(newbie);
+                return nullptr;
+        }
+
+shw
+        (*ptr)++;
+shw
+        return newbie;
+
+        #undef shw
 }
 
 node *parse_infix(const char *fname)
@@ -124,10 +156,11 @@ node *parse_infix(const char *fname)
 
         remove_spaces(data.buf);
 
-        node *rt = nullptr;
-        char *r  = read_formula(data.buf, rt, &rt);
-        if (!r) {
+        char *r = data.buf;
+        node *rt = read_formula(&r);
+        if (*r != '\0' || !rt) {
                 fprintf(stderr, "Invalid format\n");
+                fprintf(stderr, "Here >>> %s\n", r);
 $               (free_tree(rt);)
                 rt = nullptr;
         }

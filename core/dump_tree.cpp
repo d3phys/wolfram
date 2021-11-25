@@ -180,14 +180,14 @@ static void print_node(node *cur)
 
         n.cur = cur;
 
-        switch (cur->data.type) {
-        case WF_VARIABLE:
+        switch (cur->type) {
+        case NODE_VAR:
                 opt = &NODE_VARIABLE;
                 break;
-        case WF_OPERATOR:
+        case NODE_OP:
                 opt = &NODE_OPERATOR;
                 break;
-        case WF_LITERAL:
+        case NODE_NUM:
                 opt = &NODE_LITERAL;
                 break;
         default:
@@ -209,6 +209,7 @@ static void print_node(node *cur)
         e.to   = cur->right;
         gvprint_edge(&e);
 
+        /*
 #ifdef TREE_DEBUG
         e.opt = &EDGE_INVIS;
 
@@ -224,12 +225,11 @@ static void print_node(node *cur)
                 gvprint_edge(&e);
         }
 
-        /*
         e.to   = cur->right->parent;
         e.from = cur->right;
         gvprint_edge(&e);
-        */
 #endif
+        */
 }
 
 static inline void gvprint_option(const char *opt, const char *name)
@@ -272,16 +272,15 @@ static inline void gvprint_content(const gviz_node *node)
 
         gvprint("[label=\"");
 
-        wf_data data = node->cur->data;
-        switch (data.type) {
-        case WF_VARIABLE:
-                gvprint("%c", data.val.var);
+        switch (node->cur->type) {
+        case NODE_VAR:
+                gvprint("%c", *node_var(node->cur));
                 break;
-        case WF_OPERATOR:
-                gvprint_operator(data.val.op);
+        case NODE_OP:
+                gvprint_operator(*node_op(node->cur));
                 break;
-        case WF_LITERAL:
-                gvprint("%lg", data.val.lit);
+        case NODE_NUM:
+                gvprint("%lg", *node_num(node->cur));
                 break;
         default:
                 assert(0);

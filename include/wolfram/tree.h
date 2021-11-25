@@ -1,24 +1,23 @@
 #ifndef TREE_H
 #define TREE_H
 
-union wf_value {
-        char    var;
-        unsigned op;
-        double  lit;
-};
-
-struct wf_data {
-        int type = 0;
-        wf_value val;
-};
-
 struct node {
         node *left   = nullptr;
         node *right  = nullptr;
-        node *parent = nullptr;
 
-        wf_data data;
+        int type = 0;
+
+        union {
+                char     var;
+                unsigned op;
+                double   num;
+        } data;
 };
+
+double   *node_num(node *n);
+unsigned *node_op (node *n);
+char     *node_var(node *n);
+
 
 /*
  * Jumps from node to node recursively. 
@@ -32,6 +31,7 @@ void free_tree(node *root);
 node *create_node(node *parent = nullptr);
 node *copy_tree(node *n);
 
+
 #define TREE_DEBUG
 
 #ifdef TREE_DEBUG
@@ -39,6 +39,8 @@ void dump_tree(node *root);
 #else /* TREE_DEBUG */
 static inline void dump_tree(node *root) {}
 #endif /* TREE_DEBUG */
+
+int tex_tree(const char *fname, node *tree);
 
 
 #endif /* TREE_H */
