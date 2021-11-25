@@ -50,6 +50,7 @@ node *copy_tree(node *n)
         if (!newbie)
                 return nullptr;
 
+        newbie->type = n->type;
         newbie->data = n->data;
 
         if (n->left) {

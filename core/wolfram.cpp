@@ -4,19 +4,19 @@
 #include <wolfram/tree.h>
 #include <wolfram/operators.h>
 
-static node *create_lit(double value);
+static node *create_num(double value);
 static node *create_var(char name);
 static node *create_op(unsigned opcode, node *left, node *right);
 static node *diff_op(node *n);
 
-static node *create_lit(double value) 
+static node *create_num(double value) 
 {
         node *newbie = create_node();
         if (!newbie)
                 return nullptr;
 
-        newbie->type     = WF_LITERAL;
-        newbie->data.lit = value;
+        newbie->type      = NODE_NUM;
+        *node_num(newbie) = value;
 
         return newbie;
 }
@@ -27,8 +27,8 @@ static node *create_var(char name)
         if (!newbie)
                 return nullptr;
 
-        newbie->type     = WF_VARIABLE;
-        newbie->data.var = name;
+        newbie->type      = NODE_VAR;
+        *node_var(newbie) = name;
 
         return newbie;
 }
@@ -42,18 +42,14 @@ static node *create_op(unsigned opcode, node *left, node *right)
         if (!newbie)
                 return nullptr;
 
-        newbie->type    = WF_OPERATOR;
-        newbie->data.op = opcode;
+        newbie->type    = NODE_OP;
+        *node_op(newbie) = opcode;
 
-        if (left) {
+        if (left)
                 newbie->left  = left;
-                left->parent  = newbie;
-        }
 
-        if (right) {
+        if (right)
                 newbie->right = right;
-                right->parent = newbie;
-        }
 
         return newbie;
 }
@@ -69,7 +65,7 @@ static node *diff_op(node *n)
         #define D(t) diff_tree(t)
 
         #define OP(op, lc, rc) create_op(op, lc, rc)
-        #define LIT(val)       create_lit(val)
+        #define NUM(val)       create_num(val)
 
         #define ADD(lc, rc) create_op(OP_ADD, lc, rc)
         #define SUB(lc, rc) create_op(OP_SUB, lc, rc)
@@ -84,13 +80,13 @@ static node *diff_op(node *n)
         case OP_MUL:
                 return ADD(MUL(D(L), C(R)), MUL(C(L), D(R)));
         case OP_DIV:
-                return DIV(SUB(MUL(D(L), C(R)), MUL(C(L), D(R))), OP(OP_POW, C(R), LIT(2)));
+                return DIV(SUB(MUL(D(L), C(R)), MUL(C(L), D(R))), OP(OP_POW, C(R), NUM(2)));
         case OP_POW:
                 return MUL(OP(OP_POW, C(L), C(R)), ADD(MUL(D(R), OP(OP_LN, nullptr, C(L))), DIV(MUL(C(R), D(L)), C(L))));
         case OP_SIN:
                 return MUL(OP(OP_COS, nullptr, C(R)), D(R));
         case OP_COS:
-                return MUL(MUL(LIT(-1), OP(OP_SIN, nullptr, C(R))), D(R));
+                return MUL(MUL(NUM(-1), OP(OP_SIN, nullptr, C(R))), D(R));
         case OP_SH:
                 return MUL(OP(OP_CH, nullptr, C(R)), D(R));
         case OP_CH:
@@ -118,14 +114,14 @@ node *diff_tree(node *n)
         assert(n);
 
         switch (n->type) {
-        case WF_LITERAL:
-                printf("lit: %lg\n", n->data.lit);
-                return create_lit(0);
-        case WF_VARIABLE:
-                printf("var: %c\n",  n->data.var);
-                return create_lit(1);
-        case WF_OPERATOR:
-                printf("hash: %x\n", n->data.op);
+        case NODE_NUM:
+                printf("num: %lg\n", *node_num(n));
+                return create_num(0);
+        case NODE_VAR:
+                printf("var: %c\n",  *node_var(n));
+                return create_num(1);
+        case NODE_OP:
+                printf("hash: %x\n", *node_op(n));
                 return diff_op(n);
         default:
                 fprintf(stderr, "DIFF TREE FAILED whatufuck? :|\n");
@@ -154,10 +150,10 @@ node *cut_nodes(node *n)
 
         switch (n->type) {
         case OP_MUL:
-                if (n->left->data.type == WF_LITERAL && n->left->data.val.lit == 1) {
+                if (n->left->data.type == WF_NUMERAL && n->left->data.val.lit == 1) {
                         free_tree(n->left);
                         abandon_child(n, n->right);
-                } else if (n->right->data.type == WF_LITERAL && n->right->data.val.lit == 1) {
+                } else if (n->right->data.type == WF_NUMERAL && n->right->data.val.lit == 1) {
                         free_tree(n->right);
                         abandon_child(n, n->left);
                 }
