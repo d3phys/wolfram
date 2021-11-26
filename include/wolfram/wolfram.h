@@ -16,5 +16,10 @@ enum node_type {
 node *diff_tree(node *n);
 node *cut_nodes(node *n);
 
+FILE *open_tex(const char *fname);
+void close_tex(FILE *f);
+void tex_msg(FILE *f, const char *msg);
+void compile_tex(const char *fname);
+
 
 #endif /* WOLFRAM_H */
