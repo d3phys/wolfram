@@ -1,13 +1,27 @@
 #include <assert.h>
 #include <stdio.h>
+#include <math.h>
+#include <logs.h>
 #include <wolfram/wolfram.h>
 #include <wolfram/tree.h>
 #include <wolfram/operators.h>
+
+static double EPSILON = 1e-100;
 
 static node *create_num(double value);
 static node *create_var(char name);
 static node *create_op(unsigned opcode, node *left, node *right);
 static node *diff_op(node *n);
+node *calculate_consts(node *n);
+static int node_is_op(node *n, unsigned opcode);
+node *diff_node(FILE *f, node *n);
+
+static int node_is_num(node *n);
+
+static int equal(double left, double right)
+{
+        return fabs(left - right) <  EPSILON;
+}
 
 static node *create_num(double value) 
 {
@@ -58,11 +72,11 @@ static node *diff_op(node *n)
 {
         assert(n);
 
-        #define L n->left
-        #define R n->right
+        #define L op->left
+        #define R op->right
 
         #define C(t) copy_tree(t)
-        #define D(t) diff_tree(t)
+        #define D(rc) create_op(OP_DRV, nullptr, rc)
 
         #define OP(op, lc, rc) create_op(op, lc, rc)
         #define NUM(val)       create_num(val)
@@ -72,7 +86,17 @@ static node *diff_op(node *n)
         #define MUL(lc, rc) create_op(OP_MUL, lc, rc)
         #define DIV(lc, rc) create_op(OP_DIV, lc, rc)
 
-        switch (n->data.op) {
+
+        node *op = n->right;
+        free(n);
+
+        if (op->type == NODE_NUM)
+                return create_num(0);
+
+        if (op->type == NODE_VAR)
+                return create_num(1);
+
+        switch (*node_op(op)) {
         case OP_ADD:
                 return ADD(D(L), D(R));
         case OP_SUB:
@@ -94,77 +118,299 @@ static node *diff_op(node *n)
         case OP_LN:
                 return DIV(D(R), C(R));
         default:
-                return nullptr;
+                break;
         }
 
-#undef L
-#undef R
-#undef C
-#undef D
-#undef OP 
-#undef ADD
-#undef SUB
-#undef MUL 
-#undef DIV 
+        return nullptr;
 
+        #undef R
+        #undef L
+        #undef C
+        #undef D
+        #undef OP 
+        #undef ADD
+        #undef SUB
+        #undef MUL 
+        #undef DIV 
 }
 
-node *diff_tree(node *n)
+node *diff_node(FILE *f, node *n)
 {
         assert(n);
 
-        switch (n->type) {
-        case NODE_NUM:
-                printf("num: %lg\n", *node_num(n));
-                return create_num(0);
-        case NODE_VAR:
-                printf("var: %c\n",  *node_var(n));
-                return create_num(1);
-        case NODE_OP:
-                printf("hash: %x\n", *node_op(n));
-                return diff_op(n);
-        default:
-                fprintf(stderr, "DIFF TREE FAILED whatufuck? :|\n");
-                return nullptr;
+        if (node_is_op(n, OP_DRV)) {
+                $(dump_tree(n);)
+                $(tex_tree(f, n);)
+                n = diff_op(n);
+                fprintf(logs, "=======\n");
+                $(dump_tree(n);)
+                $(tex_tree(f, n);)
         }
+
+        if (n->left)
+                n->left  = diff_node(f, n->left);
+        if (n->right)
+                n->right = diff_node(f, n->right);
+
+        return n;
+}
+
+node *diff_tree(FILE *f, node *n)
+{
+        assert(n);
+
+        node *init = create_op(OP_DRV, nullptr, n);
+        $(dump_tree(init));
+        init = diff_node(f, init);
+        $(dump_tree(init));
+        return init; 
 }
 
 node *optimize_tree(node *n)
 {
         assert(n);
+        n = cut_nodes(n);
+        n = calculate_consts(n);
+        return n;
 }
 
-/*
-node *cut_nodes(node *n)
+static int node_is_zero(node *n)
+{
+        if (!n)
+                return 0;
+
+        if (n->type == NODE_NUM)
+                if (equal(*node_num(n), 0))
+                        return 1;
+        return 0;
+}
+
+static int node_is_one(node *n)
+{
+        if (!n)
+                return 0;
+
+        if (n->type == NODE_NUM)
+                if (equal(*node_num(n), 1))
+                        return 1;
+        return 0;
+}
+
+static int node_is_op(node *n, unsigned opcode)
 {
         assert(n);
 
-        if (n->type != WF_OPERATOR)
-                return nullptr;
+        if (n->type == NODE_OP)
+                if (*node_op(n) == opcode)
+                        return 1;
+        return 0;
+}
 
-        if (n->left) 
-                cut_nodes(n->left);
+static int node_is_num(node *n)
+{
+        assert(n);
 
-        if (n->right) 
-                cut_nodes(n->right);
+        if (n->type == NODE_NUM)
+                return 1;
 
-        switch (n->type) {
-        case OP_MUL:
-                if (n->left->data.type == WF_NUMERAL && n->left->data.val.lit == 1) {
-                        free_tree(n->left);
-                        abandon_child(n, n->right);
-                } else if (n->right->data.type == WF_NUMERAL && n->right->data.val.lit == 1) {
-                        free_tree(n->right);
-                        abandon_child(n, n->left);
+        return 0;
+}
+
+static node *cut_zero(node *n)
+{
+        assert(n);
+        if (node_is_op(n, OP_MUL)) {
+                if (node_is_zero(n->left)) {
+                        node *ret = n->left;
+                        n->left   = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+
+                if (node_is_zero(n->right)) {
+                        node *ret = n->right;
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+        }
+
+        if (node_is_op(n, OP_ADD)) {
+                if (node_is_zero(n->left)) {
+                        node *ret = n->right;
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+
+                if (node_is_zero(n->right)) {
+                        node *ret = n->left;
+                        n->left   = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+        }
+
+        if (node_is_op(n, OP_SUB)) {
+                if (node_is_zero(n->left)) {
+                        *node_num(n->left) = -1;
+                        *node_op(n) = OP_MUL;
+                        return n;
+                }
+
+                if (node_is_zero(n->right)) {
+                        node *ret = n->left;
+                        n->left   = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+        }
+
+        if (node_is_op(n, OP_DIV)) {
+                if (node_is_zero(n->left)) {
+                        node *ret = n->left;
+                        n->left   = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+        }
+
+        return n;
+}
+
+static node *cut_one(node *n)
+{
+        assert(n);
+        if (node_is_op(n, OP_MUL)) {
+                if (node_is_one(n->left)) {
+                        node *ret = n->right;
+                        n->right = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+
+                if (node_is_one(n->right)) {
+                        node *ret = n->left;
+                        n->left = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+        }
+
+        return n;
+}
+
+
+node *calculate_consts(node *n)
+{
+        assert(n);
+
+        if (n->type != NODE_OP)
+                return n;
+
+        if (n->left)
+                n->left = calculate_consts(n->left);
+
+        if (n->right)
+                n->right = calculate_consts(n->right);
+
+        switch (*node_op(n)) {
+        case OP_ADD:
+                if (node_is_num(n->right) && node_is_num(n->left)) {
+                        node *ret = n->right;
+                        *node_num(n->right) = *node_num(n->left) +
+                                              *node_num(n->right);
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
                 }
                 break;
-
+        case OP_SUB:
+                if (node_is_num(n->right) && node_is_num(n->left)) {
+                        node *ret = n->right;
+                        *node_num(n->right) = *node_num(n->left) -
+                                              *node_num(n->right);
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+                break;
+        case OP_MUL:
+                if (node_is_num(n->right) && node_is_num(n->left)) {
+                        node *ret = n->right;
+                        *node_num(n->right) = *node_num(n->left) *
+                                              *node_num(n->right);
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+                break;
+        case OP_DIV:
+                if (node_is_num(n->right) && node_is_num(n->left)) {
+                        node *ret = n->right;
+                        *node_num(n->right) = *node_num(n->left) /
+                                              *node_num(n->right);
+                        n->right  = nullptr;
+                        free_tree(n);
+                        return ret;
+                }
+                break;
+        case OP_SIN:
+                if (node_is_num(n->right)) {
+                        if (equal(*node_num(n->right), 0)) {
+                                node *ret = n->right;
+                                *node_num(n->right) = 0;
+                                n->right  = nullptr;
+                                free_tree(n);
+                                return ret;
+                        }
+                        return n;
+                }
+                break;
+        case OP_LN:
+                if (node_is_num(n->right)) {
+                        if (equal(*node_num(n->right), 1)) {
+                                node *ret = n->right;
+                                *node_num(n->right) = 0;
+                                n->right  = nullptr;
+                                free_tree(n);
+                                return ret;
+                        }
+                        return n;
+                }
+                break;
         default:
                 break;
         }
 
-        return nullptr;
+        
+        return n;
 }
-*/
+
+node *cut_nodes(node *n)
+{
+        assert(n);
+
+        if (n->type != NODE_OP)
+                return n;
+
+        n = cut_one(n);
+        n = cut_zero(n);
+
+        if (n->left)
+                n->left = cut_nodes(n->left);
+        if (n->right)
+                n->right= cut_nodes(n->right);
+        if (n->left)
+                n->left = cut_zero(n->left);
+        if (n->right)
+                n->right = cut_zero(n->right);
+        if (n->left)
+                n->left = cut_one(n->left);
+        if (n->right)
+                n->right = cut_one(n->right);
+
+        return n;
+}
 
 
