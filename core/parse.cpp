@@ -79,11 +79,11 @@ static ptrdiff_t remove_spaces(char *buf)
 }
 
 
+#define PARSE_DEBUG
 static node *read_formula(char **ptr)
 {
-        #define PARSE_DEBUG
         #ifdef PARSE_DEBUG
-        #define shw printf("%d: %s\n", __LINE__, *ptr);
+        #define $$ printf("%d: %s\n", __LINE__, *ptr);
         #else
         #define shw ;
         #endif 
@@ -92,38 +92,38 @@ static node *read_formula(char **ptr)
 
         if (**ptr != '(')
                 return nullptr;
-shw
+$$
         (*ptr)++;
-shw
+$$
         node *newbie = create_node();
         if (!newbie)
                 return nullptr;
-shw
+$$
 
         if (**ptr == '(') {
                 newbie->left = read_formula(ptr);
 
-shw
+$$
                 if (!newbie->left) {
                         free_tree(newbie);
                         return nullptr;
                 }
         }
-shw
+$$
         node *read = read_data(ptr, newbie);
-shw
+$$
         if (!read) {
                 free_tree(newbie);
                 return nullptr;
         }
 
-shw
+$$
         if (**ptr == '(') {
                 if (newbie->type != NODE_OP) {
                         free_tree(newbie);
                         return nullptr;
                 }
-shw
+$$
                 newbie->right = read_formula(ptr);
                 if (!newbie->right) {
                         free_tree(newbie);
@@ -131,18 +131,18 @@ shw
                 }
         }
 
-shw
+$$
         if (**ptr != ')') {
                 free_tree(newbie);
                 return nullptr;
         }
 
-shw
+$$
         (*ptr)++;
-shw
+$$
         return newbie;
 
-        #undef shw
+        #undef $$ 
 }
 
 node *parse_infix(const char *fname)
