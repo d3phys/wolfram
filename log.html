@@ -1,0 +1,635 @@
+<pre>
+void** realloc_stack(const stack*, size_t): items = (item_t *)realloc((void *)items, cap);
+void** realloc_stack(const stack*, size_t): memset(items + stk->size, FILL_BYTE, cap - stk->size * sizeof(item_t));
+----------------------------------------------
+ Stack: <font color="green"><b>ok</b></font>
+ Size:                   0 <font color="green"><b>ok</b></font>
+ Capacity:               8 <font color="green"><b>ok</b></font>
+ Address start: 0x6060000000e0
+ Address   end: 0x606000000120
+----------------------------------------------
+| 0x0000 stk[      0] = 0x7575757575757575 |
+| 0x0008 stk[      1] = 0x7575757575757575 |
+| 0x0010 stk[      2] = 0x7575757575757575 |
+| 0x0018 stk[      3] = 0x7575757575757575 |
+| 0x0020 stk[      4] = 0x7575757575757575 |
+| 0x0028 stk[      5] = 0x7575757575757575 |
+| 0x0030 stk[      6] = 0x7575757575757575 |
+| 0x0038 stk[      7] = 0x7575757575757575 |
+----------------------------------------------
+
+
+
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+
+<img src="log/dump0.svg"/>
+int main(): node *dt = diff_tree(tex, rt);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_tree(FILE*, node*): dump_tree(init)
+
+<img src="log/dump1.svg"/>
+node* diff_tree(FILE*, node*): tex_tree(f, init);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_tree(FILE*, node*): tex_tree(f, init);
+node* diff_tree(FILE*, node*): dump_tree(init)
+
+<img src="log/dump2.svg"/>
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump3.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): n->left = diff_op(n->left);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump4.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump5.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): n->left = diff_op(n->left);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump6.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump7.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_node(FILE*, node*, node*): n->right = diff_op(n->right);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump8.svg"/>
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump9.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump10.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_node(FILE*, node*, node*): n->right = diff_op(n->right);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump11.svg"/>
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump12.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump13.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): n->left = diff_op(n->left);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump14.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->left);
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump15.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_node(FILE*, node*, node*): n->right = diff_op(n->right);
+node* create_node(node*): node *newbie = (node *)calloc(1, sizeof(node));
+node* diff_node(FILE*, node*, node*): dump_tree(n->left);
+
+<img src="log/dump16.svg"/>
+node* diff_node(FILE*, node*, node*): dump_tree(n->right);
+
+<img src="log/dump17.svg"/>
+node* diff_node(FILE*, node*, node*): tex_tree(f, n->right);
+node* diff_tree(FILE*, node*): tex_tree(f, init);
+node* diff_tree(FILE*, node*): dump_tree(init)
+
+<img src="log/dump18.svg"/>
+int main(): dump_tree(dt);
+
+<img src="log/dump19.svg"/>
+int main(): dt = optimize_tree(dt);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump20.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump21.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump22.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump23.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump24.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump25.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump26.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump27.svg"/>
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump28.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump29.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump30.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump31.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump32.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump33.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump34.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump35.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump36.svg"/>
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump37.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump38.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump39.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump40.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump41.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump42.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump43.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump44.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump45.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump46.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump47.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump48.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump49.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump50.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump51.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump52.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump53.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump54.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump55.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump56.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump57.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_one_nodes(node*): dump_tree(n);
+
+<img src="log/dump58.svg"/>
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+node* cut_nodes(node*): n = cut_one_nodes (n);
+node* cut_nodes(node*): n = cut_zero_nodes(n);
+node* cut_nodes(node*): n = cut_same_nodes(n);
+int main(): dump_tree(dt);
+
+<img src="log/dump59.svg"/>
+int main(): dump_tree(dt);
+
+<img src="log/dump60.svg"/>
+int main(): tex_tree_start(tex);
+int main(): tex_tree(tex, dt);
+int main(): tex_tree_end(tex);
+int main(): tex_big_tree(tex, dt);
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump61.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump62.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump63.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump64.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump65.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump66.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump67.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump68.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump69.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump70.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump71.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump72.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump73.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump74.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump75.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump76.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump77.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump78.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump79.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump80.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump81.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump82.svg"/>
+size_t change_of_vars(node*): dump_tree(n);
+
+<img src="log/dump83.svg"/>
+----------------------------------------------
+ Stack: <font color="green"><b>ok</b></font>
+ Size:                   0 <font color="green"><b>ok</b></font>
+ Capacity:               8 <font color="green"><b>ok</b></font>
+ Address start: 0x6060000000e0
+ Address   end: 0x606000000120
+----------------------------------------------
+| 0x0000 stk[      0] = 0x556de61467e0 |
+| 0x0008 stk[      1] = 0x556de61467e0 |
+| 0x0010 stk[      2] = 0x556de61467e0 |
+| 0x0018 stk[      3] = 0x556de61467e0 |
+| 0x0020 stk[      4] = 0x556de61467e0 |
+| 0x0028 stk[      5] = 0x556de61467e0 |
+| 0x0030 stk[      6] = 0x556de61467e0 |
+| 0x0038 stk[      7] = 0x556de61467e0 |
+----------------------------------------------
+
+
+
+int tex_big_tree(FILE*, node*): tex_tree(f, tree);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);
+void free_tree(node*): free(root);

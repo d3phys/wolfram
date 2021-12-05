@@ -20,8 +20,10 @@ const unsigned OP_LN = 0x42915e0b;
 const unsigned OP_SH = 0x6c00f189;
 const unsigned OP_CH = 0xc4315587;
 const unsigned OP_TH = 0xf0c16625;
+const unsigned OP_CTH = 0x6ec624d;
 const unsigned OP_LOG = 0x7b0741e5;
 const unsigned OP_EXP = 0x7ed16325;
+const unsigned OP_DRV = 0x19c7d28e;
 
 const char *optostr(unsigned hash);
 

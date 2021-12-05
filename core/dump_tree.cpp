@@ -33,6 +33,7 @@ digraph {
         node [style    = "rounded, filled"] 
         node [color    = grey, fillcolor = white]
         node [fontname = "Courier"]
+        edge [fontname = "Courier"]
 
         compound  = true;
         newrank   = true;
@@ -50,6 +51,7 @@ struct gviz_options {
         const char *fontname  = nullptr;
         const char *fillcolor = nullptr;
         const char *fontsize  = nullptr;
+        const char *label     = nullptr;
 };
 
 const gviz_options NODE_LITERAL  = {
@@ -70,12 +72,28 @@ const gviz_options NODE_OPERATOR = {
         .fillcolor = "azure2",
 };
 
+const gviz_options NODE_DERIVATIVE = {
+        .color = "grey",
+        .shape = "box",
+        .fillcolor = "ghostwhite",
+};
+
 const gviz_options EDGE_INVIS = {
         .style = "dotted"
 };
 
 const gviz_options EDGE_DEFAULT = {
         .style = "dashed"
+};
+
+const gviz_options EDGE_RIGHT = {
+        .style = "dashed",
+        .label = "R",
+};
+
+const gviz_options EDGE_LEFT = {
+        .style = "dashed",
+        .label = "L",
 };
 
 struct gviz_node {
@@ -185,7 +203,10 @@ static void print_node(node *cur)
                 opt = &NODE_VARIABLE;
                 break;
         case NODE_OP:
-                opt = &NODE_OPERATOR;
+                if (*node_op(cur) == OP_DRV)
+                        opt = &NODE_DERIVATIVE;
+                else
+                        opt = &NODE_OPERATOR;
                 break;
         case NODE_NUM:
                 opt = &NODE_LITERAL;
@@ -203,33 +224,13 @@ static void print_node(node *cur)
         e.opt = &EDGE_DEFAULT;
         e.from = cur;
 
+        e.opt = &EDGE_LEFT;
         e.to   = cur->left;
         gvprint_edge(&e);
 
+        e.opt = &EDGE_RIGHT;
         e.to   = cur->right;
         gvprint_edge(&e);
-
-        /*
-#ifdef TREE_DEBUG
-        e.opt = &EDGE_INVIS;
-
-        if (cur->left) {
-                e.from = cur->left;
-                e.to   = cur->left->parent;
-                gvprint_edge(&e);
-        }
-
-        if (cur->right) {
-                e.from = cur->right;
-                e.to   = cur->right->parent;
-                gvprint_edge(&e);
-        }
-
-        e.to   = cur->right->parent;
-        e.from = cur->right;
-        gvprint_edge(&e);
-#endif
-        */
 }
 
 static inline void gvprint_option(const char *opt, const char *name)
@@ -252,6 +253,7 @@ static void gvprint_options(const gviz_options *opt)
         gvprint_option(opt->fontname, "fontname");
         gvprint_option(opt->fillcolor, "fillcolor");
         gvprint_option(opt->fontsize, "fontsize");
+        gvprint_option(opt->label, "label");
 
         gvprint("]");
 }

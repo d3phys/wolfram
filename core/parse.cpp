@@ -85,7 +85,7 @@ static node *read_formula(char **ptr)
         #ifdef PARSE_DEBUG
         #define $$ printf("%d: %s\n", __LINE__, *ptr);
         #else
-        #define shw ;
+        #define $$;
         #endif 
 
         assert(ptr && *ptr);

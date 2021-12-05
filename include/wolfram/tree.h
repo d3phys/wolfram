@@ -31,6 +31,8 @@ void free_tree(node *root);
 node *create_node(node *parent = nullptr);
 node *copy_tree(node *n);
 
+size_t calc_tree_size(node *n);
+node *compare_trees(node *t1, node *t2);
 
 #define TREE_DEBUG
 
@@ -40,7 +42,8 @@ void dump_tree(node *root);
 static inline void dump_tree(node *root) {}
 #endif /* TREE_DEBUG */
 
-int tex_tree(const char *fname, node *tree);
+int tex_tree(FILE *f, node *tree);
+int tex_big_tree(FILE *f, node *tree);
 
 
 #endif /* TREE_H */

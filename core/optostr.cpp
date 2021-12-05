@@ -36,10 +36,14 @@ const char *optostr(unsigned hash)
                 return "ch";
         case OP_TH: 
                 return "th";
+        case OP_CTH: 
+                return "cth";
         case OP_LOG: 
                 return "log";
         case OP_EXP: 
                 return "exp";
+        case OP_DRV: 
+                return "drv";
         default:
                 return nullptr;
 }

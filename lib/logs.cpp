@@ -8,7 +8,7 @@ FILE *logs = nullptr;
 
 #ifdef LOG_FILE
 
-__attribute__((constructor))
+__attribute__((constructor(101)))
 static void init()
 { 
         logs = fopen(LOG_FILE, "w");
@@ -22,13 +22,12 @@ static void init()
                 fclose(logs);
         }
 
-        // ascii red 
         logs = stderr;
 }
 
 #else
 
-__attribute__((constructor))
+__attribute__((constructor(101)))
 static void init() { logs = stderr; }
 
 #endif /* LOG_FILE */ 

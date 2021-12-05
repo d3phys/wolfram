@@ -7,7 +7,65 @@
 #include <wolfram/tree.h>
 #include <wolfram/wolfram.h>
 
-static void unlink_tree(node *n);
+node *compare_trees(node *t1, node *t2)
+{
+        assert(t1);
+        assert(t2);
+
+        if (t1->type != t2->type)
+                return t1;
+
+        switch (t1->type) {
+        case NODE_NUM:
+                if (*node_num(t1) != *node_num(t2))
+                        return t1;
+                break;
+        case NODE_VAR:
+                if (*node_var(t1) != *node_var(t2))
+                        return t1;
+                break;
+        case NODE_OP:
+                if (*node_op(t1) != *node_op(t2))
+                        return t1;
+                break;
+        dafault:
+                assert(0);
+                return nullptr;
+        }
+
+        if (((!t1->left  && t2->left)  || (t1->left && !t2->left)) ||
+            ((!t1->right && t2->right) || (t1->right && !t2->right)))
+               return t1; 
+
+        node *t = nullptr;
+
+        if (t1->left)
+                t = compare_trees(t1->left, t2->left);
+        if (t)
+                return t;
+
+        if (t1->right)
+                t = compare_trees(t1->right, t2->right);
+        if (t)
+                return t;
+
+        return nullptr;
+}
+
+size_t calc_tree_size(node *n) 
+{
+        assert(n);
+
+        if (n->left && n->right)
+                return calc_tree_size(n->left) + 
+                       calc_tree_size(n->right);
+        if (n->right)
+                return calc_tree_size(n->right);
+        if (n->left)
+                return calc_tree_size(n->left);
+
+        return 1;
+}
 
 double *node_num(node *n)
 {

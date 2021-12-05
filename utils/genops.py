@@ -37,7 +37,7 @@ const char *optostr(unsigned hash);
 #endif /* WFOPERATOR_H */
 """)
 
-with open("./lib/optostr.cpp", "w") as file:
+with open("./core/optostr.cpp", "w") as file:
     file.write(header)
     file.write("""
 #include <wolfram/operators.h>
@@ -54,7 +54,7 @@ const char *optostr(unsigned hash)
         file.write(f"""        case OP_{word}: 
                 return \"{tok}\";\n""")
     file.write("""        default:
-                return 0;}\n}\n""")
+                return nullptr;\n}\n}\n""")
 
 
 
