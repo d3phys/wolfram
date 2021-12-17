@@ -43,7 +43,7 @@ static inline void dump_tree(node *root) {}
 #endif /* TREE_DEBUG */
 
 int tex_tree(FILE *f, node *tree);
-int tex_big_tree(FILE *f, node *tree);
+int tex_big_tree(FILE *f, node *tree, int phrase = 1);
 
 
 #endif /* TREE_H */

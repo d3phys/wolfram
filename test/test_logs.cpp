@@ -2,59 +2,59 @@
 #include <hash.h>
 #include <logs.h>
 #include <stack.h>
+#include <errno.h>
+#include <string.h>
 
 #include <wolfram/tree.h>
 #include <wolfram/wolfram.h>
 #include <wolfram/operators.h>
 #include <wolfram/parse.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-        printf("Hello\n");
+        if (argc < 2 || argc > 3) {
+                fprintf(stderr, "There must be 1-2 args\n");
+                return EXIT_FAILURE;
+        }
 
         FILE *tex = open_tex("check.tex");
-        node *rt = parse_infix("equ");
+
+        if (argc == 3) {
+                if (strlen(argv[2]) != 1) {
+                        fprintf(stderr, "It should be 1 letter variable %s", argv[2]);
+                        return EXIT_FAILURE;
+                }
+        }
+
+        char var = 0;
+        if (argc == 3) {
+                var = *argv[2];
+        }
+
+        node *rt = parse_infix(argv[1]);
         dump_tree(rt);
         
-        tex_msg(tex, "Найдем производную функции:\n");
-//        $(tex_tree(tex, rt);)
-        //$(node *cp = copy_tree(rt);)
-        $(node *dt = diff_tree(tex, rt);)
-        $(dump_tree(dt);)
-//        $(tex_tree(tex, dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
- //       stack stk = {0};
- //       construct_stack(&stk);
- //       $(dt = replace_nodes(dt, &stk);)
+        tex_msg(tex, "Найдем производную proстейшей функции:\n");
+        $(tex_tree_start(tex, 0);)
+        $(tex_tree(tex, rt);)
+        $(tex_tree_end(tex);)
 
-        /*
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        $(dump_tree(dt);)
-        $(dt = optimize_tree(dt);)
-        */
+        node *dt = nullptr;
+        if (var) {
+                $(dt = diff_tree(tex, rt, var);)
+        } else {
+                $(dt = diff_tree(tex, rt);)
+        }
 
-        //printf("%p\n", cp);
+        $(dump_tree(dt);)
+        $(dt = optimize_tree(dt);)
+        $(dump_tree(dt);)
         $(dump_tree(dt);)
 
         tex_msg(tex, "После элементарных преобразований получаем:\n");
- //       $(tex_tree(tex, dt);)
+        $(tex_big_tree(tex, dt, 0));
+        tex_msg(tex, "\\textbf{Пусть вниметельный читатель засунет свой учебник по матану себе в задницу}\n");
 
-        $(tex_tree_start(tex);)
-        $(tex_tree(tex, dt);)
-        $(tex_tree_end(tex);)
-
-        tex_msg(tex, "После :\n");
-        $(tex_big_tree(tex, dt);)
         close_tex(tex);
         compile_tex("check.tex");
 

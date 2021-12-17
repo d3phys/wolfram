@@ -72,9 +72,9 @@ make: subdirs
 mur: subdirs
 	$(CXX) $(CXXFLAGS) -o mur utils/mur.o lib/lib.o
 
-test: make 
-	$(CXX) $(CXXFLAGS) -o tst test/test_logs.o core/core.o lib/lib.o
-	./tst
+bin: make 
+	$(CXX) $(CXXFLAGS) -o diff test/test_logs.o core/core.o lib/lib.o
+	./diff
 
 touch:
 	@find $(HPATH) -print -exec touch {} \;

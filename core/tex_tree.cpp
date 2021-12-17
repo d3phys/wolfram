@@ -10,7 +10,6 @@
 #include <stack.h>
 
 
-// \left \right
 // indentfirst
 // одиночные аргументы
 // умножение на -1
@@ -23,6 +22,7 @@
 // 0^x 
 static const char *const PHRASES[] = {
         "Методом тотальной аналогии получим",
+        "Нажрался на коллапса и написать",
         "Из элементарных свойств конических сечений получим",
         "А ведь не трудно вспомнить",
         "Легко увидеть принцип Дирихле",
@@ -41,10 +41,45 @@ static const char *const PHRASES[] = {
 };
 
 static const char HEADER[] = R"(
-        \documentclass{article}
-        \usepackage[utf8]{inputenc}
-        \usepackage[T2A]{fontenc}
-        \begin{document}
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{geometry} 
+\usepackage{amsmath}
+\geometry{a4paper} 
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\begin{document}
+\begin{titlepage}
+   \begin{center}
+        \Huge
+        Дедков Д. А.
+        \vspace*{1cm}
+        
+        \textbf{Основы математического анализа или \\ ЧТОБ НЕ КОКНУЛО}
+       
+        \vspace{0.5cm}
+        \vspace{1.5cm}
+        \large
+        Легендарное издание, \\
+        душевно в душу
+        \vfill
+        \normalfont
+        \normalsize
+        \begin{minipage}{10cm}
+        \begin{center}
+        Допущено министерством образования Республики Беларусь
+        \end{center}
+        \end{minipage}
+        
+        \vspace{2cm}
+        \includegraphics[scale = 0.4]{head-ass.png} 
+        \vspace{0.5cm}
+        
+        2021, декабрь
+   \end{center}
+\end{titlepage}
+
 )";
 
 static const char FOOTER[] = R"(
@@ -60,6 +95,8 @@ static const char EQ_FOOTER[] = R"(
         \end{equation}
 )";
 
+static const size_t TREE_MAX_NODES = 21;
+
 static int isop(unsigned opcode, node *n);
 static void tex_pow (FILE *f, node *left, node *right);
 static void tex_data(FILE *const f, node *n);
@@ -68,6 +105,10 @@ static void tex_func(FILE *f, node *func, node *arg);
 static void tex_frac(FILE *f, node *left, node *right);
 static void tex_cdot(FILE *f, node *left, node *right);
 static void tex_drv (FILE *f, node *var, node *expr);
+
+static void tex_left (FILE *f);
+static void tex_right(FILE *f);
+
 
 static stack *VARS_STACK = nullptr;
 
@@ -140,13 +181,16 @@ static size_t change_of_vars(node *n)
         static char name = 'A';
 
         size_t size = 1;
+        if (name == 'Z')
+                name = 'a';
+
         if (n->left)
                 size += change_of_vars(n->left);
         if (n->right)
                 size += change_of_vars(n->right);
         $(dump_tree(n);)
 
-        if (size >= 33) {
+        if (size >= 7) {
                 node *newbie = create_node();
                 newbie->type = NODE_VAR;
                 *node_var(newbie) = name;
@@ -159,17 +203,25 @@ static size_t change_of_vars(node *n)
         return size;
 }
 
-int tex_big_tree(FILE *f, node *tree) 
+int tex_big_tree(FILE *f, node *tree, int phrase) 
 {
         assert(tree);
         assert(f);
+
+        printf("SiZE: %lu\n", calc_tree_size(tree));
+        if (calc_tree_size(tree) < 8) {
+                tex_tree_start(f);
+                $(tex_tree(f, tree);)
+                tex_tree_end(f);
+                return 0;
+        }
 
         change_of_vars(tree);
         
         dump_stack(VARS_STACK);
         node *temp = nullptr;
 
-        tex_tree_start(f);
+        tex_tree_start(f, phrase);
         $(tex_tree(f, tree);)
         tex_tree_end(f);
 
@@ -189,9 +241,11 @@ int tex_big_tree(FILE *f, node *tree)
         return 0;
 }
 
-void tex_tree_start(FILE *f)
+void tex_tree_start(FILE *f, int phrase)
 {
-        fprintf(f, "%s\n", PHRASES[rand() % (sizeof(PHRASES) / sizeof(*PHRASES))]);
+        if (phrase)
+                fprintf(f, "%s\n", PHRASES[rand() % (sizeof(PHRASES) / sizeof(*PHRASES))]);
+
         fprintf(f, EQ_HEADER);
 }
 
@@ -226,9 +280,9 @@ static void tex_pow(FILE *f, node *left, node *right)
         assert(right);
 
         if (left->type == NODE_OP) {
-                fprintf(f, "(");
+                tex_left(f);
                 tex_node(f, left);
-                fprintf(f, ")");
+                tex_right(f);
         } else {
                 tex_node(f, left);
         }
@@ -244,9 +298,11 @@ static void tex_func(FILE *f, node *func, node *arg)
         assert(arg);
 
         if (arg->type == NODE_OP) {
-                fprintf(f, "\\%s{(", optostr(*node_op(func)));
+                fprintf(f, "\\%s{", optostr(*node_op(func)));
+                tex_left(f);
                 tex_node(f, arg);
-                fprintf(f, ")}");
+                tex_right(f);
+                fprintf(f, "}");
         } else {
                 fprintf(f, "\\%s{", optostr(*node_op(func)));
                 tex_node(f, arg);
@@ -273,9 +329,10 @@ static void tex_drv(FILE *f, node *var, node *expr)
         assert(var);
         assert(expr);
 
-        fprintf(f, "\\frac{\\partial}{\\partial %c}(", *node_var(var));
+        fprintf(f, "\\frac{\\partial}{\\partial %c}", *node_var(var));
+        tex_left(f);
         tex_node(f, expr);
-        fprintf(f, ")");
+        tex_right(f);
 }
 
 static void tex_cdot(FILE *f, node *left, node *right)
@@ -284,9 +341,9 @@ static void tex_cdot(FILE *f, node *left, node *right)
         assert(right);
 
         if (isop(OP_ADD, left) || isop(OP_SUB, left)) {
-                fprintf(f, "(");
+                tex_left(f);
                 tex_node(f, left);
-                fprintf(f, ")"); 
+                tex_right(f);
         } else {
                 tex_node(f, left);
         }
@@ -294,9 +351,9 @@ static void tex_cdot(FILE *f, node *left, node *right)
         fprintf(f, "\\cdot ");
 
         if (isop(OP_ADD, right) || isop(OP_SUB, right)) {
-                fprintf(f, "(");
+                tex_left(f);
                 tex_node(f, right);
-                fprintf(f, ")"); 
+                tex_right(f);
         } else {
                 tex_node(f, right);
         }
@@ -380,15 +437,30 @@ static void tex_data(FILE *const f, node *n)
                 fprintf(f, "%c",  *node_var(n));
                 break;
         case NODE_NUM:
-                if (*node_num(n) < 0)
-                        fprintf(f, "(%lg)", *node_num(n));
-                else 
+                if (*node_num(n) < 0) {
+                        tex_left(f);
                         fprintf(f, "%lg", *node_num(n));
+                        tex_right(f);
+                } else  {
+                        fprintf(f, "%lg", *node_num(n));
+                }
                 break;
         default:
                 assert(0);
                 break;
         }
+}
+
+static void tex_left (FILE *f)
+{
+        assert(f);
+        fprintf(f, "\\left( ");
+}
+
+static void tex_right(FILE *f)
+{
+        assert(f);
+        fprintf(f, "\\right) ");
 }
 
 

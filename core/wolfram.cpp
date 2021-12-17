@@ -101,13 +101,14 @@ node *diff_node(FILE *f, node *n, node *root)
         if (n->left) {
                 if (node_is_op(n->left, OP_DRV)) {
                         $(dump_tree(n->left);)
-                        tex_tree_start(f);
-                        $(tex_tree(f, n->left);)
+                        //tex_tree_start(f);
+                        //$(tex_big_tree(f, n->left);)
+                        $(tex_big_tree(f, n->left);)
                         $(n->left = diff_op(n->left);)
-                        fprintf(f, "=");
+                        //fprintf(f, "=");
                         $(dump_tree(n->left);)
-                        $(tex_tree(f, n->left);)
-                        tex_tree_end(f);
+                        $(tex_big_tree(f, n->left);)
+                        //tex_tree_end(f);
                 }
 
                 diff_node(f, n->left, root);
@@ -115,6 +116,16 @@ node *diff_node(FILE *f, node *n, node *root)
 
         if (n->right) {
                 if (node_is_op(n->right, OP_DRV)) {
+                        $(dump_tree(n->right);)
+                        //tex_tree_start(f);
+                        //$(tex_big_tree(f, n->right);)
+                        $(n->right = diff_op(n->right);)
+                        //fprintf(f, "=");
+                        $(dump_tree(n->right);)
+                        $(tex_big_tree(f, n->right);)
+                        //tex_tree_end(f);
+
+                        /*
                         $(dump_tree(n->right);)
                         tex_tree_start(f);
                         $(tex_tree(f, n->right);)
@@ -124,6 +135,7 @@ node *diff_node(FILE *f, node *n, node *root)
                         $(dump_tree(n->right);)
                         $(tex_tree(f, n->right);)
                         tex_tree_end(f);
+                        */
                 }
 
                 diff_node(f, n->right, root);
@@ -133,15 +145,14 @@ node *diff_node(FILE *f, node *n, node *root)
         return n;
 }
 
-node *diff_tree(FILE *f, node *n)
+node *diff_tree(FILE *f, node *n, char variable)
 {
         assert(n);
 
         node *init = create_op(OP_DRV, nullptr, n);
-        node *var  = create_var('x');
+        node *var  = create_var(variable);
         init->left = var;
         $(dump_tree(init));
-        tex_msg(f, "Возьмем простенькую производную\n");
 
         tex_tree_start(f);
         $(tex_tree(f, init);)
